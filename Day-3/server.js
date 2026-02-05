@@ -2,11 +2,17 @@ const express=require("express")
 
 const app=express()
 
-app.get("/",(req,res)=>{
-    res.send("Hello World")
+app.use(express.json())
+
+const notes=[]
+
+app.post("/notes",(req,res)=>{
+    console.log(req.body);
+    notes.push(req.body)
+    res.send("Note added successfully")
 })
-app.get("/contact",(req,res)=>{
-    res.send("Hello suchee,you are at contact page")
+app.get("/notes",(req,res)=>{
+    res.send(notes)
 })
 
 app.listen(3000,()=>{
