@@ -1,46 +1,72 @@
-import React from 'react'
-import { useState } from 'react'
-import {axios} from "axios"
+import React, { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
 
 const App = () => {
-  const [notes, setNotes] = useState([
-    {
-      title:"test title 1",
-      description:"test description 1"
-    },
-    {
-      title:"test title 2",
-      description:"test description 2"
-    },
-    {
-      title:"test title 3",
-      description:"test description 3"
-    },
-    {
-      title:"test title 4",
-      description:"test description 4"
-    },
-  ])
+  const [notes, setNotes] = useState([]);
+  // console.log("hello");
 
-  axios.get("http://localhost:3000/api/notes")
-  .then((res)=>{
-    setNotes(res.data.notes)
-  })
-  
+  // console.log(res.data.notes);
 
-  
-  return (
-    <div className='notes'>
-      {notes.map(note=>{
-        return <div className='note'>
-          <h1>{note.title}</h1>
-          <p>{note.description}</p>
+  function fetchNotes() {
+    axios.get("http://localhost:3000/api/notes").then((res) => {
+      setNotes(res.data.notes);
+    });
+  }
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
-        </div>
-      })}
+  function submitHandle(e){
+    e.preventDefault()
+    const { title , description }= e.target.elements
+    console.log(title.value,description.value);
+
+    axios.post("http://localhost:3000/api/notes",{
+      title : title.value,
+      description : description.value
+    })
+    .then(res=>{
+      console.log(res.data);
+      fetchNotes()
       
-    </div>
-  )
-}
+    })
+    
 
-export default App
+  }
+
+  function deleteHandle(noteId){
+    axios.delete("http://localhost:3000/api/notes/"+noteId)
+    .then(res=>{
+      console.log(res.data);
+      fetchNotes()
+      
+    })
+
+
+  }
+  
+
+  return (
+    <div>
+      <form className="form-design" onSubmit={submitHandle} >
+        <input className="title" type="text" name="title" placeholder="Enter Title" />
+        <input className="title" type="text" name="description" placeholder="Enter Description" />
+        <button className="button">Create Note</button>
+      </form>
+      <div className="notes">
+      {notes.map((note) => {
+        return (
+          <div className="note">
+            <h1>{note.title}</h1>
+            <p>{note.description}</p>
+            <button onClick={()=>{deleteHandle(note._id)}}>Delete</button>
+          </div>
+        );
+      })}
+    </div>
+    </div>
+  );
+};
+
+export default App;

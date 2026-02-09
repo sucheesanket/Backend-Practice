@@ -27,3 +27,29 @@ html{
   max-width: 20rem;
   color: rgb(255, 253, 249);
 }
+
+.form-design{
+  display: flex;
+  gap: 3rem;
+  padding-block: 2rem;
+  padding-inline: 4rem;
+  font-size: 5rem;
+}
+.title{
+  padding: 1rem;
+  font-size: 1.5rem;
+  border-radius: 10px;
+}
+.button{
+  /* padding-block: 0.2rem; */
+  font-size: 1rem;
+  background-color: cyan;
+  color: rgb(141, 136, 136);
+  border-radius: 10px;
+  cursor: pointer;
+  
+
+}
+.button:active {
+  transform: scale(0.95);
+}
